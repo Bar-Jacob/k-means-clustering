@@ -30,17 +30,27 @@ void main(int argc, char *argv[]){
     char *token;
     int cnt = 0;
 
-    if(argv[1] < 0 || ((strchr(argv[1], '.' != NULL))){
-        printf("Invalid Input");
-        assert();
+    if(argc == 1){
+        assert("Missing arguments");
     }
+
+    if(atoi(argv[1]) < 0 || strchr(argv[1], '.') != NULL){
+        printf("Invalid Input");
+        assert(NULL);
+    }
+    k = atoi(argv[1]);
+    printf("k: %d\n", k);
+
     if(argc == 2){ 
         max_iter = 200;
-    }else if(argv[2] < 0 || (strchr(argv[2], '.' != NULL))){
+    }else if(atoi(argv[2]) < 0 || strchr(argv[2], '.') != NULL){
         printf("Invalid Input");
-        assert();
+        assert(NULL);
+    }else{
+        max_iter = atoi(argv[2]);
     }
-    //first brief of the input for d and n
+    
+    printf("max iter: %d\n", max_iter);
 
 
     /* opening file for reading */
@@ -62,7 +72,8 @@ void main(int argc, char *argv[]){
         }
         num_of_points += 1;
     }
-    printf("num: %d", num_of_points);
+    printf("num: %d\n", num_of_points);
+    printf("dim: %d\n", dimension);
 
     data_points = calloc(num_of_points,sizeof(double*));
     for(int i = 0; i < num_of_points; i++){
