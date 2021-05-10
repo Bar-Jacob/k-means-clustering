@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 
-typedef struct 
+typedef struct Cluster
 {
     int num_of_points;
     double* sum_of_points;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
     int cnt = 0;
     int i = 0;
     int j = 0;
-
+    
     /* assert((argc == 3) && "Missing arguments");
     */
     assert(atoi(argv[1]) > 0 && "Negative Input");
@@ -58,26 +58,16 @@ int main(int argc, char *argv[]){
         }
     }
 
+    assert(num_of_points >= k);
+
     rewind(stdin);
-    /*data_points = (double*) malloc(dimension * num_of_points * sizeof(double));
-    */
-    data_points = (double**) calloc(num_of_points, sizeof(double*));
+    data_points = (double**) calloc(num_of_points, sizeof(*data_points));
     assert(data_points != NULL);
     
     for(i = 0; i < num_of_points; i++){
-        data_points[i] = (double*) calloc(dimension,sizeof(double));
+        data_points[i] = (double*) calloc(dimension,sizeof(*data_points[i]));
+        assert(data_points[i] != NULL);
     }
-
-    /*while (scanf("%lf%c\n", &value, &c)==2)
-    {
-        *(data_points+col+row*dimension) = value;
-        if(c == '\n'){
-            col = 0;
-            row++;
-        }else if(c == ','){
-            col++;
-        }
-    }*/
     
    for(i = 0; i < num_of_points; i++){
        for(j = 0; j < dimension; j++){
@@ -85,44 +75,20 @@ int main(int argc, char *argv[]){
            data_points[i][j] = value;
        }
    }
-    
-
-    /*
-    while(fgets(vector, 1000, stdin) != NULL){
-        printf("inside while");
-        token = strtok(vector, ",");
-        for(int i = 0; i < dimension; i++){
-            if(token != NULL){
-                data_points[cnt][i] = atof(token);
-                token = strtok(NULL, ",");
-            }
-        }
-        cnt++;
-    }
-    fread(fstdin, vector, 1000);
-    for(int i = 0; i < num_of_points; i++){
-        for(int j = 0; j < dimension; j++){
-            scanf("%lf%c", &value, &c);
-            data_points[i][j] = value;
-        }
-    }
-    printf("after rewind\n");
-    */
    
     /*
     Initializing k clusters
     */
-    clusters = (Cluster*)calloc(k,sizeof(Cluster));
+    clusters = (Cluster*)calloc(k,sizeof(struct Cluster));
     for(i = 0; i < k; i++){
         clusters[i].centroid = (double*)calloc(dimension, sizeof(double));
         assert(clusters[i].centroid != NULL);
-        memcpy(clusters[i].centroid, &data_points[i], sizeof(data_points[i])); /*will be equal to the i'th vector
+
+        memcpy(clusters[i].centroid, data_points[i], sizeof(double)*dimension); /*will be equal to the i'th vector
         */
-    
         clusters[i].num_of_points = 0;
         clusters[i].sum_of_points = (double*)calloc(dimension, sizeof(double));
         assert(clusters[i].sum_of_points != NULL);
-        clusters[i].sum_of_points[i] = 0;
     }
 
     cnt = 0;
